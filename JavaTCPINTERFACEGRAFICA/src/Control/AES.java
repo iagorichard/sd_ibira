@@ -14,7 +14,7 @@ public class AES {
         this.textopuro = textopuro;
     }
     
-    public byte[] encrypt(String textopuro) throws Exception {
+    public byte[] encrypt() throws Exception {
         Cipher encripta = Cipher.getInstance("AES/CBC/PKCS5Padding", "SunJCE");
         SecretKeySpec key = new SecretKeySpec(chaveencriptacao.getBytes("UTF-8"), "AES");
         encripta.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(IV.getBytes("UTF-8")));

@@ -1,6 +1,7 @@
 package View;
 
 import Control.EsperaNovaConexao;
+import Control.AES;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -27,7 +28,7 @@ public class TelaServidor extends javax.swing.JFrame {
     ServerSocket socketServidor;
     ArrayList<PrintStream> streamsSaida;
     ArrayList<InputStream> streamsEntrada;
-    
+
     public TelaServidor() throws IOException {
         initComponents();
         jTextAreaChat.setVisible(false);
@@ -36,27 +37,8 @@ public class TelaServidor extends javax.swing.JFrame {
         this.setTitle("Chat Servidor");
         streamsSaida = new ArrayList<>();
         streamsEntrada = new ArrayList<>();
-        mapaCliqueEnter();
     }
 
-    private void mapaCliqueEnter() {
-
-        InputMap inputMap = this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "forward");
-        this.getRootPane().setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap);
-        this.getRootPane().getActionMap().put("forward", new AbstractAction() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                System.out.println("ENTER foi pressionado");
-                jButtonEnviar.doClick();
-            }
-
-        });
-    }
-
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -138,16 +120,29 @@ public class TelaServidor extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+
     private void jButtonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEnviarActionPerformed
-        for (int i = 0; i < streamsSaida.size(); i++) {
-            streamsSaida.get(i).println("Servidor disse: " + jTextFieldMensagem.getText());
+
+        try {
+            String mensagem = "Servidor disse: " + jTextFieldMensagem.getText();
+            AES cript = new AES(mensagem);
+            byte[] enviar = cript.encrypt();
+
+            for (int i = 0; i < streamsSaida.size(); i++) {
+                //streamsSaida.get(i).println("Servidor disse: " + jTextFieldMensagem.getText());
+                streamsSaida.get(i).write(enviar);
+            }
+            //atualiza area da conversa
+            jTextAreaChat.setText(jTextAreaChat.getText() + "\nTu disseste: " + jTextFieldMensagem.getText());
+            //zerando aera da mensagem a ser enviada
+            jTextFieldMensagem.setText("");
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        jTextAreaChat.setText(jTextAreaChat.getText() + "\nTu disseste: " + jTextFieldMensagem.getText());
-        jTextFieldMensagem.setText("");
     }//GEN-LAST:event_jButtonEnviarActionPerformed
 
-    
+
     private void jButtonConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConectarActionPerformed
         try {
             this.socketServidor = new ServerSocket(Integer.parseInt(jTextFieldPorta.getText()));
@@ -169,13 +164,13 @@ public class TelaServidor extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonConectarActionPerformed
 
-    
+
     private void jButtonEnviarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButtonEnviarKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonEnviarKeyPressed
 
     public static void main(String args[]) {
-        
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
