@@ -1,17 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Control;
 
-import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JTextArea;
 
 /**
@@ -31,7 +23,7 @@ public class ClienteRecebeMensagem extends Thread {
     
     @Override
     public synchronized void run(){
-        try {
+/*        try {
             Scanner s = new Scanner(socket.getInputStream());
             while (s.hasNextLine()) {
                 areaTexto.setText(areaTexto.getText() + "\n" + s.nextLine());
@@ -40,6 +32,22 @@ public class ClienteRecebeMensagem extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(ClienteRecebeMensagem.class.getName()).log(Level.SEVERE, null, ex);
         }
+  */
+        try{
+            InputStream is = socket.getInputStream();
+            AES seguranca = new AES(null);
             
+            while(true){
+                int dado;
+                byte[] recebimento = new byte[1024];
+                is.read(recebimento);
+                String resultado = seguranca.decrypt(recebimento);
+                areaTexto.setText(areaTexto.getText() + "\n" + resultado);
+            }
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
     }  
 }
