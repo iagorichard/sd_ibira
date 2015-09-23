@@ -11,13 +11,13 @@ import javax.swing.JTextArea;
  *
  * @author Iago Rodrigues
  */
-public class ClienteRecebeMensagem extends Thread {
+public class RecebeMensagem extends Thread {
 
     Socket socket;
     JTextArea areaTexto;
     ArrayList<PrintStream> streamsSaida;
 
-    public ClienteRecebeMensagem(Socket socket, JTextArea areaTexto) {
+    public RecebeMensagem(Socket socket, JTextArea areaTexto) {
         this.socket = socket;
         this.areaTexto = areaTexto;
     }
@@ -31,7 +31,7 @@ public class ClienteRecebeMensagem extends Thread {
                 System.out.println(encriptado);
                 AES seguranca = new AES(null);
                 String resultado = seguranca.decrypt(encriptado.getBytes());
-                areaTexto.setText(areaTexto.getText() + "\n" + s.nextLine());
+                areaTexto.setText(areaTexto.getText() + "\n" + resultado);
             }
 
         } catch (Exception e) {

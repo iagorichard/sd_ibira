@@ -1,6 +1,6 @@
 package View;
 
-import Control.ClienteRecebeMensagem;
+import Control.RecebeMensagem;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -173,7 +173,7 @@ public class TelaCliente extends javax.swing.JFrame {
             jTextFieldMensagem.setVisible(true);
             jButtonEnviar.setVisible(true);
         
-            ClienteRecebeMensagem recebimento = new ClienteRecebeMensagem(socket, jTextAreaChat);
+            RecebeMensagem recebimento = new RecebeMensagem(socket, jTextAreaChat);
             recebimento.start();
         } catch (Exception e) {
             e.printStackTrace();

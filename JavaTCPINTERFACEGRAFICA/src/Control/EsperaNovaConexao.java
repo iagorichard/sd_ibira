@@ -37,7 +37,7 @@ public class EsperaNovaConexao extends Thread {
                 jTextAreaChat.setText(jTextAreaChat.getText() + "\nNova conexão com o cliente de IP "
                         + socketCliente.getInetAddress().getHostAddress() + "\n");
 
-                ClienteRecebeMensagem recebimento = new ClienteRecebeMensagem(socketCliente, jTextAreaChat);
+                RecebeMensagem recebimento = new RecebeMensagem(socketCliente, jTextAreaChat);
                 recebimento.start();
             }
         } catch (Exception e) {
