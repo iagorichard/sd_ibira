@@ -34,8 +34,8 @@ public class EsperaNovaConexao extends Thread {
                 PrintStream streamSaida = new PrintStream(socketCliente.getOutputStream());
                 saidas.add(streamSaida);
                 streamsEntrada.add(socketCliente.getInputStream());
-                jTextAreaChat.setText(jTextAreaChat.getText() + "\nNova conexão com o cliente de IP "
-                        + socketCliente.getInetAddress().getHostAddress() + "\n");
+                jTextAreaChat.setText(jTextAreaChat.getText() + "\nCliente de IP "
+                        + socketCliente.getInetAddress().getHostAddress() + " entrou\n");
 
                 RecebeMensagem recebimento = new RecebeMensagem(socketCliente, jTextAreaChat);
                 recebimento.start();
@@ -44,9 +44,4 @@ public class EsperaNovaConexao extends Thread {
             e.printStackTrace();
         }
     }
-
 }
-
-
-
-
